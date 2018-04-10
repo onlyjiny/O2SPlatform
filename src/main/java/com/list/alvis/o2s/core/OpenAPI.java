@@ -235,4 +235,17 @@ public class OpenAPI {
 		}
 		return result;
 	}
+	
+	/**
+	 * Returns a string representation of this OpenAPI instance
+	 * 
+	 * @return a string representation of this OpenAPI instance
+	 */
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("Open API Name: ");
+		sb.append(this.openApiName);
+		sb.append("\n");
+		return sb.toString();
+	}
 }

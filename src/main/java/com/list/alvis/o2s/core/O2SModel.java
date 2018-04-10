@@ -2,6 +2,7 @@ package com.list.alvis.o2s.core;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Enumeration;
 import java.util.Hashtable;
 
 import org.apache.jena.rdf.model.Model;
@@ -87,7 +88,7 @@ public class O2SModel {
 	 *            This is the parameters to execute the Open API.
 	 * @return SPARQL results as JSON
 	 * @throws OpenAPINotExistException 
-	 *             there is no Open API list or Open API given name as request
+	 *             There is no Open API list or Open API given name as request
 	 * @throws MissingParameterException 
 	 *             If SPARQL has parameter(s) that not is(are) set value
 	 */
@@ -109,6 +110,21 @@ public class O2SModel {
 	 */
 	public OpenAPI getOpenApi(String openApiName) {
 		return this.mapper.get(openApiName);
+	}
+	
+	/**
+	 * Returns a string representation of this O2SModel instance
+	 * 
+	 * @return a string representation of this O2SModel instance
+	 */
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		Enumeration<String> keys = this.mapper.keys();
+		while(keys.hasMoreElements()) {
+			String methodName = keys.nextElement();
+			String openApi = this.mapper.get(methodName).toString();
+		}
+		return sb.toString();
 	}
 
 }
