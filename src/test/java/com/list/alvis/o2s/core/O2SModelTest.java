@@ -46,7 +46,8 @@ public class O2SModelTest extends TestCase {
 	
 	@Test
 	public void testGetResultVariables() throws OpenAPINotExistException, MissingParameterException {
-		ArrayList<String> vars = this.model.getOpenApi("getBookList").getResultVariables();
+//		ArrayList<String> vars = this.model.getOpenApi("getBookList").getResultVariables();
+		ArrayList<String> vars = this.model.getOpenApi("getPersonOfEra").getResultVariables();
 		for(int i = 0; i < vars.size(); i++) {
 			System.out.println(vars.get(i));
 		}

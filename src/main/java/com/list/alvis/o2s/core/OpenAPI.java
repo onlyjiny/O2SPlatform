@@ -218,7 +218,7 @@ public class OpenAPI {
 	 */
 	public ArrayList<String> getResultVariables() {
 		ArrayList<String> result = new ArrayList<String>();
-		Pattern pattern = Pattern.compile("(select\\s)(.*?)(where)");
+		Pattern pattern = Pattern.compile("(select\\s)(.*?\\r?\\n?)(where)");
 		Matcher matcher = pattern.matcher(this.mappingSparql.toLowerCase());
 		List<String> listMatches = new ArrayList<String>();
 		while (matcher.find()) {
@@ -242,9 +242,28 @@ public class OpenAPI {
 	 * @return a string representation of this OpenAPI instance
 	 */
 	public String toString() {
+		ArrayList<String> resultVar = this.getResultVariables();
 		StringBuffer sb = new StringBuffer();
 		sb.append("Open API Name: ");
 		sb.append(this.openApiName);
+		sb.append("\n");
+		sb.append("Open API Title: ");
+		sb.append(this.title);
+		sb.append("\n");
+		sb.append("Open API Comment: ");
+		sb.append(this.comment);
+		sb.append("\n");
+		sb.append("Open API Parameters: ");
+		sb.append("\n");
+		sb.append(this.params.toString());
+		if (resultVar.size() > 0) {
+			sb.append("Open API Return Values: ");
+			sb.append("\n");
+			for (int i = 0; i < resultVar.size(); i++) {
+				sb.append(resultVar.get(i));
+				sb.append("\n");
+			}
+		}
 		sb.append("\n");
 		return sb.toString();
 	}

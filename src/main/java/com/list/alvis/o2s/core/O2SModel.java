@@ -11,6 +11,8 @@ import org.apache.jena.rdf.model.ResIterator;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.util.FileManager;
 import org.apache.jena.vocabulary.RDF;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <p>
@@ -24,6 +26,8 @@ import org.apache.jena.vocabulary.RDF;
  * @since 2018-04-05
  */
 public class O2SModel {
+	
+	private static Logger logger = LoggerFactory.getLogger(O2SModel.class);
 
 	/**
 	 * the variable for Open API list
@@ -98,6 +102,7 @@ public class O2SModel {
 		}
 		OpenAPI openApi = this.mapper.get(openApiName);
 		String sparql = openApi.getSparql(parameters);
+		logger.debug(sparql);
 		return openApi.getEndpoint().execute(sparql);
 	}
 	
@@ -123,6 +128,7 @@ public class O2SModel {
 		while(keys.hasMoreElements()) {
 			String methodName = keys.nextElement();
 			String openApi = this.mapper.get(methodName).toString();
+			sb.append(openApi.toString());
 		}
 		return sb.toString();
 	}

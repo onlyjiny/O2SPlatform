@@ -49,4 +49,15 @@ public class WebEndpoint extends Endpoint {
 		ResultSetFormatter.outputAsJSON(outputStream, results);
 		return new String(outputStream.toByteArray());
 	}
+	
+	/**
+	 * Returns a string representation of this WebEndpoint instance
+	 * 
+	 * @return a string representation of this WebEndpoint instance
+	 */
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		sb.append(super.url);
+		return sb.toString();
+	}
 }

@@ -88,4 +88,17 @@ public class Parameter {
 	public String getParameterName() {
 		return parameterName;
 	}
+	
+	/**
+	 * Returns a string representation of this Parameter instance
+	 * 
+	 * @return a string representation of this Parameter instance
+	 */
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		sb.append(this.title);
+		sb.append(", ");
+		sb.append(this.comment);
+		return sb.toString();
+	}
 }

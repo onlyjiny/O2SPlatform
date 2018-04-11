@@ -1,5 +1,6 @@
 package com.list.alvis.o2s.core;
 
+import java.util.Enumeration;
 import java.util.Hashtable;
 
 import org.apache.jena.rdf.model.Model;
@@ -37,5 +38,24 @@ public class ParameterSet extends Hashtable<String, Parameter> {
 			Parameter param = new Parameter(node.asResource());
 			this.put(param.getParameterName(), param);
 		}
+	}
+	
+	/**
+	 * Returns a string representation of this ParameterSet instance
+	 * 
+	 * @return a string representation of this ParameterSet instance
+	 */
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		Enumeration<String> keys = this.keys();
+		while(keys.hasMoreElements()) {
+			String key = keys.nextElement();
+			Parameter param = this.get(key);
+			sb.append(key);
+			sb.append(" - ");
+			sb.append(param.toString());
+			sb.append("\n");
+		}
+		return sb.toString();
 	}
 }
