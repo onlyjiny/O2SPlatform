@@ -1,6 +1,7 @@
 package com.list.alvis.o2s.core;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
@@ -37,9 +38,28 @@ public class O2SModelTest extends TestCase {
 	public void testExecute() throws OpenAPINotExistException, MissingParameterException {
 		Hashtable<String, String> params = new Hashtable<String, String>();
 		params.put("era", "조선");
-		params.put("limit", "100");
+		params.put("limit", "1");
 		params.put("offset", "0");
 		String json = this.model.execute("getPersonOfEra", params);
+		System.out.println(json);
+		assertNotNull(json);
+	}
+	
+	@Test
+	public void testExecuteHashtable() throws OpenAPINotExistException, MissingParameterException {
+		Hashtable<String, String> params = new Hashtable<String, String>();
+		params.put("method", "getPersonOfEra");
+		params.put("era", "조선");
+		params.put("limit", "1");
+		params.put("offset", "0");
+		String json = this.model.execute(params);
+		System.out.println(json);
+		assertNotNull(json);
+	}
+	
+	@Test
+	public void testExecuteUrl() throws OpenAPINotExistException, MissingParameterException, MalformedURLException {
+		String json = this.model.execute("http://192.168.0.210:8080/o2sweb/openapi.jsp?method=getPersonOfEra&era=조선&limit=1&offset=0");
 		System.out.println(json);
 		assertNotNull(json);
 	}
