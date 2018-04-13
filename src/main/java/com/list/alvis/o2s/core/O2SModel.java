@@ -2,6 +2,9 @@ package com.list.alvis.o2s.core;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
@@ -104,6 +107,74 @@ public class O2SModel {
 		String sparql = openApi.getSparql(parameters);
 		logger.debug(sparql);
 		return openApi.getEndpoint().execute(sparql);
+	}
+	
+	/**
+	 * This method is used to run Open API.
+	 * 
+	 * @param parameters
+	 *            This is the parameters to execute the Open API.
+	 * @return SPARQL results as JSON
+	 * @throws OpenAPINotExistException 
+	 *             There is no Open API list or Open API given name as request
+	 * @throws MissingParameterException 
+	 *             If SPARQL has parameter(s) that not is(are) set value
+	 */
+	public String execute(Hashtable<String, String> parameters) throws OpenAPINotExistException, MissingParameterException {
+		if(!parameters.containsKey("method")) {
+			throw new OpenAPINotExistException("The url must contain the method parameter.");
+		}
+		String openApiName = parameters.get("method");
+		parameters.remove("method");
+		return this.execute(openApiName, parameters);
+	}
+	
+	/**
+	 * This method is used to run Open API.
+	 * 
+	 * @param url
+	 *            This is the parameters to execute the Open API.
+	 * @return SPARQL results as JSON
+	 * @throws OpenAPINotExistException 
+	 *             There is no Open API list or Open API given name as request
+	 * @throws MissingParameterException 
+	 *             If SPARQL has parameter(s) that not is(are) set value
+	 */
+	public String execute(URL url) throws OpenAPINotExistException, MissingParameterException {
+		return this.execute(this.getQueryMap(url.getQuery()));
+	}
+	
+	/**
+	 * This method is used to run Open API.
+	 * 
+	 * @param urlString
+	 *            This is the parameters to execute the Open API.
+	 * @return SPARQL results as JSON
+	 * @throws OpenAPINotExistException 
+	 *             There is no Open API list or Open API given name as request
+	 * @throws MissingParameterException 
+	 *             If SPARQL has parameter(s) that not is(are) set value
+	 * @throws MalformedURLException
+	 *             If url string parameter is invalid
+	 */
+	public String execute(String urlString) throws OpenAPINotExistException, MissingParameterException, MalformedURLException {
+		URL url = new URL(urlString);
+		return this.execute(this.getQueryMap(url.getQuery()));
+	}
+	
+	private Hashtable<String, String> getQueryMap(String query) {
+		String[] params = query.split("&");
+		Hashtable<String, String> map = new Hashtable<String, String>();
+	    for (String param : params)
+	    {
+	    	int pos = param.indexOf("=");
+	        String name = param.substring(0, pos);
+	        String value = param.substring(pos + 1, param.length());
+	        if((!name.equals("")) && (!value.equals(""))) {
+		        map.put(name, value);
+	        }
+	    }
+	    return map;
 	}
 	
 	/**
