@@ -3,7 +3,6 @@ package com.list.alvis.o2s.core;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
-import java.net.URI;
 import java.net.URL;
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -30,7 +29,7 @@ import org.slf4j.LoggerFactory;
  */
 public class O2SModel {
 	
-	private static Logger logger = LoggerFactory.getLogger(O2SModel.class);
+	private static final Logger logger = LoggerFactory.getLogger(O2SModel.class);
 
 	/**
 	 * the variable for Open API list
@@ -67,8 +66,11 @@ public class O2SModel {
 				this.mapper.put(openApi.getOpenApiName(), openApi);
 			}
 		} else {
+			logger.error("At least one Open API must be defined in ontology.");
 			throw new OpenAPINotExistException("At least one Open API must be defined in ontology.");
 		}
+		logger.debug(this.toString());
+		logger.info("Complete to read Open API to SPARQL mapping ontology.");
 	}
 	
 	private Model readModel(String filename) throws IOException {
@@ -76,10 +78,13 @@ public class O2SModel {
 		InputStream in = FileManager.get().open(filename);
 		String extension = filename.substring(filename.lastIndexOf(".") + 1, filename.length()).toLowerCase();
 		if(extension.equals("ttl")) {
+			logger.info("Start to read Open API to SPARQL mapping ontology as Turtle format.");
 			model.read(in, null, "TURTLE");
 		} else if(extension.equals("owl")) {
+			logger.info("Start to read Open API to SPARQL mapping ontology as RDF/XML format.");
 			model.read(in, null, "RDF/XML");
 		} else if(extension.equals("n3")) {
+			logger.info("Start to read Open API to SPARQL mapping ontology as N3 format.");
 			model.read(in, null, "N3");
 		}
 		in.close();
@@ -105,7 +110,9 @@ public class O2SModel {
 		}
 		OpenAPI openApi = this.mapper.get(openApiName);
 		String sparql = openApi.getSparql(parameters);
-		logger.debug(sparql);
+		logger.debug("Open API name: " + openApiName);
+		logger.debug("Endpoint: " + openApi.getEndpoint().getUrl());
+		logger.debug("SPARQL: " + sparql);
 		return openApi.getEndpoint().execute(sparql);
 	}
 	

@@ -9,6 +9,8 @@ import org.apache.jena.query.ResultSet;
 import org.apache.jena.query.ResultSetFormatter;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.sparql.engine.http.QueryEngineHTTP;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <p>
@@ -22,6 +24,8 @@ import org.apache.jena.sparql.engine.http.QueryEngineHTTP;
  */
 public class WebEndpoint extends Endpoint {
 
+	private static final Logger logger = LoggerFactory.getLogger(WebEndpoint.class);
+	
 	/**
 	 * Constructor.
 	 * 
@@ -42,11 +46,14 @@ public class WebEndpoint extends Endpoint {
 	 * @return SPARQL results as JSON
 	 */
 	public String execute(String sparql) {
+		logger.info("Run SPARQL to web endpoint.");
+		logger.debug("Web endpoint: " + this.url);
 		Query query = QueryFactory.create(sparql);
 		QueryEngineHTTP qEngine = QueryExecutionFactory.createServiceRequest(this.url, query);
 		ResultSet results = qEngine.execSelect();
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 		ResultSetFormatter.outputAsJSON(outputStream, results);
+		logger.debug(new String(outputStream.toByteArray()));
 		return new String(outputStream.toByteArray());
 	}
 	
