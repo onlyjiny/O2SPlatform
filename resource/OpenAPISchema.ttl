@@ -1,4 +1,4 @@
-# Saved by TopBraid on Wed Apr 04 18:55:41 KST 2018
+# Saved by TopBraid on Mon Apr 23 14:19:55 KST 2018
 # baseURI: http://openapi.alvis.kr/ontology/
 # imports: http://purl.org/dc/elements/1.1/
 # imports: http://spinrdf.org/spin
@@ -13,59 +13,76 @@
 @prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
 
 :     rdf:type owl:Ontology ;
-      owl:imports <http://purl.org/dc/elements/1.1/> , <http://spinrdf.org/spin> ;
+      owl:imports <http://spinrdf.org/spin> , <http://purl.org/dc/elements/1.1/> ;
       owl:versionInfo "Created with TopBraid Composer"^^xsd:string .
 
 :Endpoint
       rdf:type owl:Class ;
-      rdfs:label "엔드포인트"@ko , "Endpoint"@en ;
+      rdfs:label "Endpoint"@en , "엔드포인트"@ko ;
       rdfs:subClassOf owl:Thing .
 
 :OpenAPI
       rdf:type owl:Class ;
-      rdfs:label "오픈 API"@ko , "Open API"@en ;
+      rdfs:label "Open API"@en , "오픈 API"@ko ;
       rdfs:subClassOf owl:Thing .
 
 :Parameter
       rdf:type owl:Class ;
-      rdfs:label "매개변수"@ko , "Parameter"@en ;
+      rdfs:label "Parameter"@en , "매개변수"@ko ;
       rdfs:subClassOf owl:Thing .
+
+:VirtuosoEndpoint
+      rdf:type owl:Class ;
+      rdfs:label "Virtuoso 엔드포인트"@ko , "Virtuoso endpoint"@en ;
+      rdfs:subClassOf :Endpoint .
 
 :WebEndpoint
       rdf:type owl:Class ;
-      rdfs:label "웹 기반 엔드포인트"@ko , "Web Endpoint"@en ;
+      rdfs:label "Web Endpoint"@en , "웹 기반 엔드포인트"@ko ;
       rdfs:subClassOf :Endpoint .
+
+:endpointId
+      rdf:type owl:DatatypeProperty ;
+      rdfs:domain :Endpoint ;
+      rdfs:label "아이디"@ko , "ID for endpoint connection"@en ;
+      rdfs:range xsd:string .
+
+:endpointPwd
+      rdf:type owl:DatatypeProperty ;
+      rdfs:domain :Endpoint ;
+      rdfs:label "패스워드"@ko , "Password for endpoint connection"@en ;
+      rdfs:range xsd:string .
 
 :hasEndpoint
       rdf:type owl:ObjectProperty ;
       rdfs:domain :OpenAPI ;
-      rdfs:label "엔드포인트"@ko , "endpoint"@en ;
+      rdfs:label "endpoint"@en , "엔드포인트"@ko ;
       rdfs:range :Endpoint .
 
 :hasParameter
       rdf:type owl:ObjectProperty ;
       rdfs:domain :OpenAPI ;
-      rdfs:label "parameter"@en , "매개변수"@ko ;
+      rdfs:label "매개변수"@ko , "parameter"@en ;
       rdfs:range :Parameter .
 
 :mappingSparql
       rdf:type owl:DatatypeProperty ;
       rdfs:domain :OpenAPI ;
-      rdfs:label "맵핑 SPARQL"@ko , "mapping sparql"@en ;
+      rdfs:label "mapping sparql"@en , "맵핑 SPARQL"@ko ;
       rdfs:range xsd:string .
 
 :openApiName
       rdf:type owl:DatatypeProperty ;
       rdfs:domain :OpenAPI ;
-      rdfs:label "오픈 API 이름"@ko , "Open API Name"@en ;
+      rdfs:label "Open API Name"@en , "오픈 API 이름"@ko ;
       rdfs:range xsd:string .
 
 :paramName
       rdf:type owl:DatatypeProperty ;
       rdfs:domain :Parameter ;
-      rdfs:label "매개변수 이름"@ko , "parameter name"@en ;
+      rdfs:label "parameter name"@en , "매개변수 이름"@ko ;
       rdfs:range xsd:string .
 
 :url  rdf:type owl:DatatypeProperty ;
       rdfs:domain :Endpoint ;
-      rdfs:label "주소"@ko , "url"@en .
+      rdfs:label "url"@en , "주소"@ko .

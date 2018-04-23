@@ -1,4 +1,4 @@
-# Saved by TopBraid on Fri Apr 06 11:48:22 KST 2018
+# Saved by TopBraid on Mon Apr 23 14:24:06 KST 2018
 # baseURI: http://openapi.alvis.kr/resource/
 # imports: http://openapi.alvis.kr/ontology/
 # imports: http://spinrdf.org/spin
@@ -15,14 +15,28 @@
 @prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
 
 :     rdf:type owl:Ontology ;
-      owl:imports oas: , <http://spinrdf.org/spin> ;
+      owl:imports <http://spinrdf.org/spin> , oas: ;
       owl:versionInfo "Created with TopBraid Composer"^^xsd:string .
+
+:GetAllTriples
+      rdf:type oas:OpenAPI ;
+      rdfs:comment "전체 트리플 추출 Open API"^^xsd:string ;
+      rdfs:label "Get all triples"@en , "전체 트리플 추출"@ko ;
+      oas:hasEndpoint :LocalVirtuosoEndpoint ;
+      oas:hasParameter :ParamOffset , :ParamLimit ;
+      oas:mappingSparql """select ?subject ?predicate ?object where { 
+  ?subject ?predicate ?object .
+}
+LIMIT [[limit]]
+OFFSET [[offset]]"""^^xsd:string ;
+      oas:openApiName "getTriples"^^xsd:string ;
+      dc:title "전체 트리플 추출"@ko .
 
 :GetBookList
       rdf:type oas:OpenAPI ;
-      rdfs:label "서지 검색 [@ko}"^^xsd:string , "Search book"@en ;
+      rdfs:label "Search book"@en , "서지 검색 [@ko}"^^xsd:string ;
       oas:hasEndpoint :NLEndpoint ;
-      oas:hasParameter :ParamLimit , :ParamOffset ;
+      oas:hasParameter :ParamOffset , :ParamLimit ;
       oas:mappingSparql """select ?book ?title ?author where { 
   ?book <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.org/ontology/bibo/Book> .   
   ?book <http://www.w3.org/2000/01/rdf-schema#label> ?title .
@@ -51,31 +65,38 @@ OFFSET [[offset]]"""^^xsd:string ;
 
 :KoDBpediaEndpoint
       rdf:type oas:WebEndpoint ;
-      rdfs:label "한국어 DBpedia 엔드포인트"@ko , "Ko DBpedia endpoint"@en ;
+      rdfs:label "Ko DBpedia endpoint"@en , "한국어 DBpedia 엔드포인트"@ko ;
       oas:url "http://ko.dbpedia.org/sparql"^^xsd:string .
+
+:LocalVirtuosoEndpoint
+      rdf:type oas:VirtuosoEndpoint ;
+      rdfs:label "로컬 Virtuoso 엔드포인트"@ko , "Local virtuoso endpoint"@en ;
+      oas:endpointId "dba"^^xsd:string ;
+      oas:endpointPwd "dba"^^xsd:string ;
+      oas:url "jdbc:virtuoso://192.168.0.11:1111"^^xsd:string .
 
 :NLEndpoint
       rdf:type oas:WebEndpoint ;
-      rdfs:label "National Library SPARQL Endpoint"@en , "국립중앙도서관 LOD SPARQL Endpoint"@ko ;
+      rdfs:label "국립중앙도서관 LOD SPARQL Endpoint"@ko , "National Library SPARQL Endpoint"@en ;
       oas:url "http://lod.nl.go.kr/sparql"^^xsd:string .
 
 :ParamEra
       rdf:type oas:Parameter ;
       rdfs:comment "시대를 지정하기 위한 매개변수"^^xsd:string ;
-      rdfs:label "시대 매개변수"@ko , "era Parameter"@en ;
+      rdfs:label "era Parameter"@en , "시대 매개변수"@ko ;
       oas:paramName "era"^^xsd:string ;
       dc:title "시대 매개변수"@ko .
 
 :ParamLimit
       rdf:type oas:Parameter ;
       rdfs:comment "SPARQL 반환 결과의 개수를 지정하기 위한 매개변수"^^xsd:string ;
-      rdfs:label "SPARQL limit 매개변수"@ko , "limit Parameter"@en ;
+      rdfs:label "limit Parameter"@en , "SPARQL limit 매개변수"@ko ;
       oas:paramName "limit"^^xsd:string ;
       dc:title "SPARQL limit 매개변수"@ko .
 
 :ParamOffset
       rdf:type oas:Parameter ;
       rdfs:comment "SPARQL 결과 반환 시 시작 레코드를 지정하기 위한 매개변수"@ko ;
-      rdfs:label "SPARQL offset 매개변수"@ko , "offset Parameter"@en ;
+      rdfs:label "offset Parameter"@en , "SPARQL offset 매개변수"@ko ;
       oas:paramName "offset"^^xsd:string ;
       dc:title "SPARQL offset 매개변수"@ko .

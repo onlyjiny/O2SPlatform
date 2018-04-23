@@ -9,11 +9,16 @@ import java.util.regex.Pattern;
 
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.Statement;
+import org.apache.jena.rdf.model.StmtIterator;
 import org.apache.jena.vocabulary.DC;
+import org.apache.jena.vocabulary.RDF;
 import org.apache.jena.vocabulary.RDFS;
 
 import com.list.alvis.o2s.endpoint.Endpoint;
+import com.list.alvis.o2s.endpoint.EndpointTypeException;
+import com.list.alvis.o2s.endpoint.VirtuosoEndpoint;
 import com.list.alvis.o2s.endpoint.WebEndpoint;
+import com.list.alvis.o2s.util.OntologyUtils;
 
 /**
  * <p>
@@ -41,8 +46,9 @@ public class OpenAPI {
 	 * @throws ValueNotExistException
 	 *             If there is no value of Open API's title, name, and mapping
 	 *             SPARQL
+	 * @throws EndpointTypeException
 	 */
-	public OpenAPI(Resource resource) throws ValueNotExistException {
+	public OpenAPI(Resource resource) throws ValueNotExistException, EndpointTypeException {
 		this.setTitle(resource);
 		this.setComment(resource);
 		this.setOpenApiName(resource);
@@ -87,13 +93,39 @@ public class OpenAPI {
 		this.mappingSparql = statement.getObject().asLiteral().getValue().toString();
 	}
 
-	private void setEndpoint(Resource resource) throws ValueNotExistException {
+	private void setEndpoint(Resource resource) throws ValueNotExistException, EndpointTypeException {
 		if (!resource.hasProperty(Vocabulary.ENDPOINT_PROPERTY)) {
 			throw new ValueNotExistException("An " + resource.getURI()
 					+ " instance of OpenAPI class must have the SPARQL endpoint information using oas:hasEndpoint property.");
 		}
 		Statement statement = resource.getProperty(Vocabulary.ENDPOINT_PROPERTY);
-		this.endpoint = new WebEndpoint(statement.getObject().asResource());
+		Resource endpointResource = statement.getObject().asResource();
+		StmtIterator types = endpointResource.listProperties(RDF.type);
+		int endpointType = 0;
+		while (types.hasNext()) {
+			Statement typeStmt = types.nextStatement();
+			Resource type = typeStmt.getObject().asResource();
+			endpointType = OntologyUtils.getEndpointType(type);
+			switch (endpointType) {
+			case 0:
+				continue;
+			case 1:
+				this.endpoint = new WebEndpoint(statement.getObject().asResource());
+				break;
+			case 2:
+				this.endpoint = new VirtuosoEndpoint(statement.getObject().asResource());
+				break;
+			default:
+				break;
+			}
+			if(endpointType != 0) {
+				break;
+			}
+		}
+		if (endpointType == 0) {
+			throw new EndpointTypeException(
+					"The endpoint instance that indicate the SPARQL endpoint must be type of WebEndpoint or VirtuosoEndpoint class.");
+		}
 	}
 
 	private void setParameters(Resource resource) throws ValueNotExistException {
@@ -232,13 +264,13 @@ public class OpenAPI {
 		} else {
 			String select = listMatches.get(0);
 			String[] variables = select.trim().split(" ");
-			for(int i = 0; i < variables.length; i++) {
+			for (int i = 0; i < variables.length; i++) {
 				result.add(variables[i]);
 			}
 		}
 		return result;
 	}
-	
+
 	/**
 	 * Returns a string representation of this OpenAPI instance
 	 * 

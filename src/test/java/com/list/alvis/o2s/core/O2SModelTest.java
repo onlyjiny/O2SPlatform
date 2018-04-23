@@ -8,11 +8,13 @@ import java.util.Hashtable;
 import junit.framework.TestCase;
 import org.junit.Test;
 
+import com.list.alvis.o2s.endpoint.EndpointTypeException;
+
 public class O2SModelTest extends TestCase {
 	
 	O2SModel model;
 	
-	public O2SModelTest( String testName ) throws IOException, ValueNotExistException, OpenAPINotExistException {
+	public O2SModelTest( String testName ) throws IOException, ValueNotExistException, OpenAPINotExistException, EndpointTypeException {
         super( testName );
 		this.model = new O2SModel();
 		this.model.load("resource/OpenAPI.ttl");
@@ -28,6 +30,9 @@ public class O2SModelTest extends TestCase {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (OpenAPINotExistException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (EndpointTypeException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

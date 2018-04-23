@@ -16,6 +16,8 @@ import org.apache.jena.vocabulary.RDF;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.list.alvis.o2s.endpoint.EndpointTypeException;
+
 /**
  * <p>
  * The O2SModel class includes functions to mapping and use Open API as SPARQL.
@@ -55,8 +57,9 @@ public class O2SModel {
 	 *            If there is no value of Open API's title, name, and mapping SPARQL 
 	 * @throws OpenAPINotExistException 
 	 *            If there is no Open API declaration in the ontology 
+	 * @throws EndpointTypeException 
 	 */
-	public void load(String filename) throws IOException, ValueNotExistException, OpenAPINotExistException {
+	public void load(String filename) throws IOException, ValueNotExistException, OpenAPINotExistException, EndpointTypeException {
 		Model model = this.readModel(filename);
 		ResIterator oaList = model.listSubjectsWithProperty(RDF.type, Vocabulary.OPENAPI_CLASS_RESOURCE);
 		if(oaList.hasNext()) {

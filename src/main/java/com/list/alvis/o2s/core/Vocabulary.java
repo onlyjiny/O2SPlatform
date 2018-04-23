@@ -66,6 +66,26 @@ public class Vocabulary {
 	public final static Property URL_PROPERTY = ResourceFactory.createProperty(Vocabulary.URL);
 	
 	/**
+	 * the URI variable for id of SPARQL endpoint
+	 */
+	public final static String ID = "http://openapi.alvis.kr/ontology/endpointId";
+	
+	/**
+	 * the variable of Property type for id property
+	 */
+	public final static Property ID_PROPERTY = ResourceFactory.createProperty(Vocabulary.ID);
+	
+	/**
+	 * the URI variable for password of SPARQL endpoint
+	 */
+	public final static String PWD = "http://openapi.alvis.kr/ontology/endpointPwd";
+	
+	/**
+	 * the variable of Property type for password property
+	 */
+	public final static Property PWD_PROPERTY = ResourceFactory.createProperty(Vocabulary.PWD);
+	
+	/**
 	 * the URI variable for parameters of Open API
 	 */
 	public final static String PARAMETER = "http://openapi.alvis.kr/ontology/hasParameter";
