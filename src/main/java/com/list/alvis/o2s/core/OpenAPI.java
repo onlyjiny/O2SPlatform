@@ -12,6 +12,9 @@ import org.apache.jena.rdf.model.Statement;
 import org.apache.jena.vocabulary.DC;
 import org.apache.jena.vocabulary.RDFS;
 
+import com.list.alvis.o2s.endpoint.Endpoint;
+import com.list.alvis.o2s.endpoint.WebEndpoint;
+
 /**
  * <p>
  * The OpenAPI class includes an Open API information.

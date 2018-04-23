@@ -1,7 +1,10 @@
-package com.list.alvis.o2s.core;
+package com.list.alvis.o2s.endpoint;
 
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.Statement;
+
+import com.list.alvis.o2s.core.ValueNotExistException;
+import com.list.alvis.o2s.core.Vocabulary;
 
 /**
  * <p>

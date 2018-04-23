@@ -1,4 +1,4 @@
-package com.list.alvis.o2s.core;
+package com.list.alvis.o2s.endpoint;
 
 import java.io.ByteArrayOutputStream;
 
@@ -11,6 +11,8 @@ import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.sparql.engine.http.QueryEngineHTTP;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.list.alvis.o2s.core.ValueNotExistException;
 
 /**
  * <p>
