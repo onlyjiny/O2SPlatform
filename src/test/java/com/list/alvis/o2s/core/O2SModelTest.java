@@ -51,6 +51,16 @@ public class O2SModelTest extends TestCase {
 	}
 	
 	@Test
+	public void testExecuteVirtuoso() throws OpenAPINotExistException, MissingParameterException {
+		Hashtable<String, String> params = new Hashtable<String, String>();
+		params.put("limit", "50");
+		params.put("offset", "0");
+		String json = this.model.execute("getTriples", params);
+		System.out.println(json);
+		assertNotNull(json);
+	}
+	
+	@Test
 	public void testExecuteHashtable() throws OpenAPINotExistException, MissingParameterException {
 		Hashtable<String, String> params = new Hashtable<String, String>();
 		params.put("method", "getPersonOfEra");

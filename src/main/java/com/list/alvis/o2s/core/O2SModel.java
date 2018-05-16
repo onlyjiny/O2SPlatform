@@ -4,8 +4,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.List;
 
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
@@ -196,6 +198,17 @@ public class O2SModel {
 	 */
 	public OpenAPI getOpenApi(String openApiName) {
 		return this.mapper.get(openApiName);
+	}
+	
+	/**
+	 * Return a Open API title list
+	 * 
+	 * @param openApiName
+	 *            This is the Open API name to get a object.
+	 * @return title string of Open API
+	 */
+	public List<String> getOpenApiList() {
+		return Collections.list(this.mapper.keys());
 	}
 	
 	/**
