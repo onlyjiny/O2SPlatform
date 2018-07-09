@@ -17,12 +17,12 @@ public class O2SModelTest extends TestCase {
 	public O2SModelTest( String testName ) throws IOException, ValueNotExistException, OpenAPINotExistException, EndpointTypeException {
         super( testName );
 		this.model = new O2SModel();
-		this.model.load("resource/OpenAPI.ttl");
+		this.model.load("resource/OpenAPI_Test.ttl");
     }
 	
 	public void testLoad() {
         try {
-			this.model.load("resource/OpenAPI.ttl");
+			this.model.load("resource/OpenAPI_Test.ttl");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -63,9 +63,8 @@ public class O2SModelTest extends TestCase {
 	@Test
 	public void testExecuteHashtable() throws OpenAPINotExistException, MissingParameterException {
 		Hashtable<String, String> params = new Hashtable<String, String>();
-		params.put("method", "getPersonOfEra");
-		params.put("era", "조선");
-		params.put("limit", "1");
+		params.put("method", "getPersonList");
+		params.put("limit", "10");
 		params.put("offset", "0");
 		String json = this.model.execute(params);
 		System.out.println(json);

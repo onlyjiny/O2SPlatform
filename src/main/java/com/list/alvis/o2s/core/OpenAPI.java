@@ -7,9 +7,12 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.jena.query.Query;
+import org.apache.jena.query.QueryFactory;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.Statement;
 import org.apache.jena.rdf.model.StmtIterator;
+import org.apache.jena.sparql.core.Var;
 import org.apache.jena.vocabulary.DC;
 import org.apache.jena.vocabulary.RDF;
 import org.apache.jena.vocabulary.RDFS;
@@ -253,20 +256,10 @@ public class OpenAPI {
 	 */
 	public ArrayList<String> getResultVariables() {
 		ArrayList<String> result = new ArrayList<String>();
-		Pattern pattern = Pattern.compile("(select\\s)(.*?\\r?\\n?)(where)");
-		Matcher matcher = pattern.matcher(this.mappingSparql.toLowerCase());
-		List<String> listMatches = new ArrayList<String>();
-		while (matcher.find()) {
-			listMatches.add(matcher.group(2));
-		}
-		if (listMatches.size() == 0) {
-			return null;
-		} else {
-			String select = listMatches.get(0);
-			String[] variables = select.trim().split(" ");
-			for (int i = 0; i < variables.length; i++) {
-				result.add(variables[i]);
-			}
+		Query query = QueryFactory.create(this.mappingSparql);
+		List<Var> vars = query.getProjectVars();
+		for(int i = 0; i < vars.size(); i++) {
+			result.add(vars.get(i).toString());
 		}
 		return result;
 	}
