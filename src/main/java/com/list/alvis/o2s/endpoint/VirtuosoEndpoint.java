@@ -30,10 +30,12 @@ import virtuoso.jena.driver.VirtuosoQueryExecutionFactory;
  */
 public class VirtuosoEndpoint extends Endpoint {
 
-private static final Logger logger = LoggerFactory.getLogger(VirtuosoEndpoint.class);
+	private static final Logger logger = LoggerFactory.getLogger(VirtuosoEndpoint.class);
 
 	private String id;
 	private String pwd;
+	
+	private VirtGraph set;
 	
 	/**
 	 * Constructor.
@@ -57,6 +59,12 @@ private static final Logger logger = LoggerFactory.getLogger(VirtuosoEndpoint.cl
 		}
 		Statement pwdStatement = resource.getProperty(Vocabulary.PWD_PROPERTY);
 		this.pwd = pwdStatement.getObject().asLiteral().getValue().toString();
+		
+		logger.info("Run SPARQL to Virtuoso endpoint.");
+		logger.debug("Virtuoso endpoint: " + this.url);
+		logger.debug("Virtuoso endpoint ID: " + this.id);
+		logger.debug("Virtuoso endpoint Password: " + this.pwd);
+		this.set = new VirtGraph (super.url, this.id, this.pwd);
 	}
 	
 	/**
@@ -67,11 +75,6 @@ private static final Logger logger = LoggerFactory.getLogger(VirtuosoEndpoint.cl
 	 * @return SPARQL results as JSON
 	 */
 	public String execute(String sparql) {
-		logger.info("Run SPARQL to Virtuoso endpoint.");
-		logger.debug("Virtuoso endpoint: " + this.url);
-		logger.debug("Virtuoso endpoint ID: " + this.id);
-		logger.debug("Virtuoso endpoint Password: " + this.pwd);
-		VirtGraph set = new VirtGraph (super.url, this.id, this.pwd);
 		Query query = QueryFactory.create(sparql);
 		VirtuosoQueryExecution vqe = VirtuosoQueryExecutionFactory.create (query, set);
 		ResultSet results = vqe.execSelect();

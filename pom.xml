@@ -57,6 +57,27 @@
 			<scope>system</scope>
 			<systemPath>${project.basedir}/lib/virtjdbc4.jar</systemPath>
 		</dependency>
+		<dependency>
+			<groupId>virtuoso.jdbc</groupId>
+			<artifactId>virtuoso-jdbc</artifactId>
+			<version>4.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/virtjdbc4.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>com.list.ontobase</groupId>
+			<artifactId>list-ontobase-client</artifactId>
+			<version>2.7</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/onto-client-2.7.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>com.list.ontobase</groupId>
+			<artifactId>list-ontobase-message</artifactId>
+			<version>2.7</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/onto-msg-2.7.jar</systemPath>
+		</dependency>
 
 	</dependencies>
 </project>

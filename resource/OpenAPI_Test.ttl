@@ -1,0 +1,208 @@
+# Saved by TopBraid on Mon Jul 02 18:03:04 KST 2018
+# baseURI: http://openapi.alvis.kr/resource/
+# imports: http://openapi.alvis.kr/ontology/
+# imports: http://spinrdf.org/spin
+
+@prefix :        <http://openapi.alvis.kr/resource/> .
+@prefix dc:      <http://purl.org/dc/elements/1.1/> .
+@prefix oas:     <http://openapi.alvis.kr/ontology/> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sp:      <http://spinrdf.org/sp#> .
+@prefix spin:    <http://spinrdf.org/spin#> .
+@prefix spl:     <http://spinrdf.org/spl#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+
+:     rdf:type owl:Ontology ;
+      owl:imports oas: , <http://spinrdf.org/spin> ;
+      owl:versionInfo "Created with TopBraid Composer"^^xsd:string .
+
+:GetBookList
+      rdf:type oas:OpenAPI ;
+      rdfs:label "서지 검색 [@ko}"^^xsd:string , "Search book"@en ;
+      oas:hasEndpoint :NLEndpoint ;
+      oas:hasParameter :ParamLimit , :ParamOffset ;
+      oas:mappingSparql """select ?book ?title ?author where { 
+  ?book <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.org/ontology/bibo/Book> .   
+  ?book <http://www.w3.org/2000/01/rdf-schema#label> ?title .
+  ?book <http://purl.org/dc/elements/1.1/creator> ?author . 
+}
+LIMIT [[limit]]
+OFFSET [[offset]]"""^^xsd:string ;
+      oas:openApiName "getBookList"^^xsd:string ;
+      dc:title "국립중앙도서관 서지 검색 Open API"@ko .
+
+:GetCountryList
+      rdf:type oas:OpenAPI ;
+      rdfs:comment "전체 국가 목록 정보 API"@ko ;
+      rdfs:label "Get country List"@en , "전체 국가 API"@ko ;
+      oas:hasEndpoint :KoDBpediaEndpoint ;
+      oas:hasParameter :ParamLimit , :ParamOffset ;
+      oas:mappingSparql """SELECT ?country as ?countryUri group_concat(?label ; SEPARATOR=\",\") as ?countryName
+WHERE {
+ 	?country a <http://history.alvis.kr/ontology/FormerCountry> .
+ 	?country <http://www.w3.org/2000/01/rdf-schema#label> ?label . 
+}
+LIMIT [[limit]]
+OFFSET [[offset]]"""^^xsd:string ;
+      oas:openApiName "getCountryList"^^xsd:string ;
+      dc:title "국가 조회 API"@ko .
+
+:GetEraList
+      rdf:type oas:OpenAPI ;
+      rdfs:comment "전체 시대 목록 정보 API"@ko ;
+      rdfs:label "전체 시대 API"@ko , "Get era List"@en ;
+      oas:hasEndpoint :KoDBpediaEndpoint ;
+      oas:hasParameter :ParamLimit , :ParamOffset ;
+      oas:mappingSparql """SELECT ?era as ?eraUri group_concat(?label ; SEPARATOR=\",\") as ?eraName
+WHERE {
+ 	?era a <http://history.alvis.kr/ontology/Era> .
+ 	?era <http://www.w3.org/2000/01/rdf-schema#label> ?label . 
+}
+LIMIT [[limit]]
+OFFSET [[offset]]"""^^xsd:string ;
+      oas:openApiName "getEraList"^^xsd:string ;
+      dc:title "시대 조회 API"@ko .
+
+:GetInfoOfPerson
+      rdf:type oas:OpenAPI ;
+      rdfs:comment "해당 인물에 대한 상세 정보 API"@ko ;
+      rdfs:label "인물 상세 정보 API"@ko , "Get informaion of Person"@en ;
+      oas:hasEndpoint :KoDBpediaEndpoint ;
+      oas:hasParameter :ParamPersonUri ;
+      oas:mappingSparql """SELECT group_concat(?pla ; SEPARATOR=\",\") as ?key str(?label) as ?value
+WHERE {
+	 FILTER (?person =[[personUri]])
+ 	?p <http://www.w3.org/2000/01/rdf-schema#label> ?pla .
+ 	{
+  		OPTIONAL {
+   			?person ?p ?label .
+   			FILTER(isLiteral(?label))
+  		}
+ 	}
+ 	UNION{
+  		OPTIONAL {
+   			?person ?p ?o .
+   			FILTER(isURI(?o))
+   			OPTIONAL {
+   				 ?o <http://www.w3.org/2000/01/rdf-schema#label> ?label .
+  			 }
+  		}
+ 	}
+}"""^^xsd:string ;
+      oas:openApiName "getInfoOfPerson"^^xsd:string ;
+      dc:title "인물 상세 조회"@ko .
+
+:GetPersonList
+      rdf:type oas:OpenAPI ;
+      rdfs:comment "전체 인물 목록 정보 API"@ko ;
+      rdfs:label "Get person List"@en , "전체 인물 API"@ko ;
+      oas:hasEndpoint :HistoryVirtuoso ;
+      oas:hasParameter :ParamOffset , :ParamLimit ;
+      oas:mappingSparql """SELECT ?person (GROUP_CONCAT(?label ; SEPARATOR=",") AS ?name)
+FROM <http://history.alvis.kr/>
+WHERE {
+    ?person a <http://history.alvis.kr/ontology/Person> .
+    ?person <http://www.w3.org/2000/01/rdf-schema#label> ?label .
+}
+GROUP BY ?person
+LIMIT [[limit]]
+OFFSET [[offset]]"""^^xsd:string ;
+      oas:openApiName "getPersonList"^^xsd:string ;
+      dc:title "전체 인물 목록 조회"@ko .
+
+:GetPersonOfCountry
+      rdf:type oas:OpenAPI ;
+      rdfs:comment "국가에 따른 인물 정보 API"^^xsd:string ;
+      rdfs:label "국가별 인물 API"@ko , "Get person of country"@en ;
+      oas:hasEndpoint :KoDBpediaEndpoint ;
+      oas:hasParameter :ParamCountry , :ParamLimit , :ParamOffset ;
+      oas:mappingSparql """SELECT ?person as ?personUri group_concat(?label ; SEPARATOR=\",\") as ?name
+WHERE {
+ 	?country <http://www.w3.org/2000/01/rdf-schema#label> [[country]]@ko . 
+ 	?country a <http://history.alvis.kr/ontology/FormerCountry> .
+ 	?person a <http://history.alvis.kr/ontology/Person> .
+ 	?person <http://history.alvis.kr/ontology/nationality> ?country .
+ 	?person <http://www.w3.org/2000/01/rdf-schema#label> ?label .
+}
+LIMIT [[limit]]
+OFFSET [[offset]]"""^^xsd:string ;
+      oas:openApiName "getPersonOfCountry"^^xsd:string ;
+      dc:title "국가별 인물 API"@ko .
+
+:GetPersonOfEra
+      rdf:type oas:OpenAPI ;
+      rdfs:comment "시대에 따른 인물 정보 API"^^xsd:string ;
+      rdfs:label "Get person of era"@en , "시대별 인물 API"@ko ;
+      oas:hasEndpoint :KoDBpediaEndpoint ;
+      oas:hasParameter :ParamOffset , :ParamLimit , :ParamEra ;
+      oas:mappingSparql """SELECT ?person as ?personUri group_concat(?label ; SEPARATOR=\",\") as ?name 
+WHERE {
+ 	?era <http://www.w3.org/2000/01/rdf-schema#label> [[era]]@ko . 
+ 	?era a <http://history.alvis.kr/ontology/Era> .
+ 	?person a <http://history.alvis.kr/ontology/Person> .
+ 	?person <http://history.alvis.kr/ontology/ageOfActivity> ?era .
+ 	?person <http://www.w3.org/2000/01/rdf-schema#label> ?label .
+}
+LIMIT [[limit]]
+OFFSET [[offset]]"""^^xsd:string ;
+      oas:openApiName "getPersonOfEra"^^xsd:string ;
+      dc:title "시대별 인물 API"@ko .
+
+:HistoryVirtuoso
+      rdf:type oas:VirtuosoEndpoint ;
+      rdfs:label "History virtuoso"^^xsd:string ;
+      oas:endpointId "dba"^^xsd:string ;
+      oas:endpointPwd "L!stSI3#"^^xsd:string ;
+      oas:url "jdbc:virtuoso://116.125.120.89:1113"^^xsd:string .
+
+:HistoryWebEndpoint
+      rdf:type oas:WebEndpoint ;
+      rdfs:label "History web endpoint"^^xsd:string ;
+      oas:url "http://alvis.kr:8893/sparql"^^xsd:string .
+
+:KoDBpediaEndpoint
+      rdf:type oas:WebEndpoint ;
+      rdfs:label "한국어 DBpedia 엔드포인트"@ko , "Ko DBpedia endpoint"@en ;
+      oas:url "http://ko.dbpedia.org/sparql"^^xsd:string .
+
+:NLEndpoint
+      rdf:type oas:WebEndpoint ;
+      rdfs:label "National Library SPARQL Endpoint"@en , "국립중앙도서관 LOD SPARQL Endpoint"@ko ;
+      oas:url "http://lod.nl.go.kr/sparql"^^xsd:string .
+
+:ParamCountry
+      rdf:type oas:Parameter ;
+      rdfs:comment "국가를 지정하기 위한 매개변수"@ko ;
+      rdfs:label "Country Parameter"@en , "국가 매개변수"@ko ;
+      oas:paramName "country"^^xsd:string ;
+      dc:title "국가 매개변수"@ko .
+
+:ParamEra
+      rdf:type oas:Parameter ;
+      rdfs:comment "시대를 지정하기 위한 매개변수"@ko ;
+      rdfs:label "시대 매개변수"@ko , "era Parameter"@en ;
+      oas:paramName "era"^^xsd:string ;
+      dc:title "시대 매개변수"@ko .
+
+:ParamLimit
+      rdf:type oas:Parameter ;
+      rdfs:comment "SPARQL 반환 결과의 개수를 지정하기 위한 매개변수"^^xsd:string ;
+      rdfs:label "SPARQL limit 매개변수"@ko , "limit Parameter"@en ;
+      oas:paramName "limit"^^xsd:string ;
+      dc:title "SPARQL limit 매개변수"@ko .
+
+:ParamOffset
+      rdf:type oas:Parameter ;
+      rdfs:comment "SPARQL 결과 반환 시 시작 레코드를 지정하기 위한 매개변수"@ko ;
+      rdfs:label "SPARQL offset 매개변수"@ko , "offset Parameter"@en ;
+      oas:paramName "offset"^^xsd:string ;
+      dc:title "SPARQL offset 매개변수"@ko .
+
+:ParamPersonUri
+      rdf:type oas:Parameter ;
+      rdfs:comment "사람Uri 지정하기 위한 매개변수"@ko ;
+      rdfs:label "person uri Parameter"@en , "사람 Uri 매개변수"@ko ;
+      oas:paramName "personUri"^^xsd:string ;
+      dc:title "사람Uri 매개변수"@ko .
