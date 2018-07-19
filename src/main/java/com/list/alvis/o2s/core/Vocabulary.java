@@ -124,5 +124,25 @@ public class Vocabulary {
 	 * the variable of Property type for openAPIName property
 	 */
 	public final static Property PARAMETER_NAME_PROPERTY = ResourceFactory.createProperty(Vocabulary.PARAMETER_NAME);
+	
+	/**
+	 * the URI variable for parameters of Open API
+	 */
+	public final static String RESULT = "http://openapi.alvis.kr/ontology/hasResultVar";
+	
+	/**
+	 * the variable of Property type for hasParameter property
+	 */
+	public final static Property RESULT_PROPERTY = ResourceFactory.createProperty(Vocabulary.RESULT);
+	
+	/**
+	 * the URI variable for Open API name property
+	 */
+	public final static String RESULT_VAR = "http://openapi.alvis.kr/ontology/resultVar";
+	
+	/**
+	 * the variable of Property type for openAPIName property
+	 */
+	public final static Property RESULT_VAR_PROPERTY = ResourceFactory.createProperty(Vocabulary.RESULT_VAR);
 
 }

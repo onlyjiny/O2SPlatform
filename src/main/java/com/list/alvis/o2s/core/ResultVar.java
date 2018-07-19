@@ -7,19 +7,19 @@ import org.apache.jena.vocabulary.RDFS;
 
 /**
  * <p>
- * The Parameter class includes a parameter information of Open API.
+ * The ResultVar class includes a result variables of Open API.
  * </p>
  * 
  * @author Myungjin Lee
  * @version 0.1
- * @since 2018-04-05
+ * @since 2018-07-19
  */
-public class Parameter {
+public class ResultVar {
 
 	private String title;
 	private String comment;
-	private String parameterName;
-
+	private String resultVar;
+	
 	/**
 	 * Constructor.
 	 * 
@@ -29,16 +29,16 @@ public class Parameter {
 	 *             If there is no value of Open API's title, name, and mapping
 	 *             SPARQL
 	 */
-	public Parameter(Resource resource) throws ValueNotExistException {
+	public ResultVar(Resource resource) throws ValueNotExistException {
 		this.setTitle(resource);
 		this.setComment(resource);
-		this.setParameterName(resource);
+		this.setResultVar(resource);
 	}
 
 	private void setTitle(Resource resource) throws ValueNotExistException {
 		if (!resource.hasProperty(DC.title)) {
 			throw new ValueNotExistException(
-					"An " + resource.getURI() + " instance of Parameter class must have the dc:title property.");
+					"An " + resource.getURI() + " instance of ResultVar class must have the dc:title property.");
 		}
 		Statement statement = resource.getProperty(DC.title);
 		this.title = statement.getObject().asLiteral().getValue().toString();
@@ -53,19 +53,19 @@ public class Parameter {
 		}
 	}
 
-	private void setParameterName(Resource resource) throws ValueNotExistException {
-		if (!resource.hasProperty(Vocabulary.PARAMETER_NAME_PROPERTY)) {
+	private void setResultVar(Resource resource) throws ValueNotExistException {
+		if (!resource.hasProperty(Vocabulary.RESULT_VAR_PROPERTY)) {
 			throw new ValueNotExistException("An " + resource.getURI()
-					+ " instance of Parameter class must have the parameter name using oas:paramName property.");
+					+ " instance of ResultVar class must have the result variable name using oas:resultVar property.");
 		}
-		Statement statement = resource.getProperty(Vocabulary.PARAMETER_NAME_PROPERTY);
-		this.parameterName = statement.getObject().asLiteral().getValue().toString();
+		Statement statement = resource.getProperty(Vocabulary.RESULT_VAR_PROPERTY);
+		this.resultVar = statement.getObject().asLiteral().getValue().toString();
 	}
-
+	
 	/**
 	 * Return a title
 	 * 
-	 * @return title string of Open API parameter
+	 * @return title string of Open API result variable
 	 */
 	public String getTitle() {
 		return title;
@@ -74,25 +74,25 @@ public class Parameter {
 	/**
 	 * Return a comment
 	 * 
-	 * @return comment string of Open API parameter
+	 * @return comment string of Open API result variable
 	 */
 	public String getComment() {
 		return comment;
 	}
 
 	/**
-	 * Return a parameter name
+	 * Return a result variable name
 	 * 
-	 * @return parameter name string of Open API parameter
+	 * @return result variable name string of Open API result variable
 	 */
-	public String getParameterName() {
-		return parameterName;
+	public String getResultVar() {
+		return resultVar;
 	}
 	
 	/**
-	 * Returns a string representation of this Parameter instance
+	 * Returns a string representation of this ResultVar instance
 	 * 
-	 * @return a string representation of this Parameter instance
+	 * @return a string representation of this ResultVar instance
 	 */
 	public String toString() {
 		StringBuffer sb = new StringBuffer();

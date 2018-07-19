@@ -7,18 +7,16 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.jena.query.Query;
-import org.apache.jena.query.QueryFactory;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.Statement;
 import org.apache.jena.rdf.model.StmtIterator;
-import org.apache.jena.sparql.core.Var;
 import org.apache.jena.vocabulary.DC;
 import org.apache.jena.vocabulary.RDF;
 import org.apache.jena.vocabulary.RDFS;
 
 import com.list.alvis.o2s.endpoint.Endpoint;
 import com.list.alvis.o2s.endpoint.EndpointTypeException;
+import com.list.alvis.o2s.endpoint.OntobaseEndpoint;
 import com.list.alvis.o2s.endpoint.VirtuosoEndpoint;
 import com.list.alvis.o2s.endpoint.WebEndpoint;
 import com.list.alvis.o2s.util.OntologyUtils;
@@ -40,6 +38,7 @@ public class OpenAPI {
 	private String mappingSparql;
 	private Endpoint endpoint;
 	private ParameterSet params;
+	private ResultVarSet resultVars;
 
 	/**
 	 * Constructor.
@@ -58,6 +57,7 @@ public class OpenAPI {
 		this.setMappingSparql(resource);
 		this.setEndpoint(resource);
 		this.setParameters(resource);
+		this.setResultVars(resource);
 	}
 
 	private void setTitle(Resource resource) throws ValueNotExistException {
@@ -118,6 +118,9 @@ public class OpenAPI {
 			case 2:
 				this.endpoint = new VirtuosoEndpoint(statement.getObject().asResource());
 				break;
+			case 3:
+				this.endpoint = new OntobaseEndpoint(statement.getObject().asResource());
+				break;
 			default:
 				break;
 			}
@@ -127,12 +130,16 @@ public class OpenAPI {
 		}
 		if (endpointType == 0) {
 			throw new EndpointTypeException(
-					"The endpoint instance that indicate the SPARQL endpoint must be type of WebEndpoint or VirtuosoEndpoint class.");
+					"The endpoint instance that indicate the SPARQL endpoint must be type of WebEndpoint, VirtuosoEndpoint or OntobaseEndpoint class.");
 		}
 	}
 
 	private void setParameters(Resource resource) throws ValueNotExistException {
 		this.params = new ParameterSet(resource);
+	}
+	
+	private void setResultVars(Resource resource) throws ValueNotExistException {
+		this.resultVars = new ResultVarSet(resource);
 	}
 
 	/**
@@ -248,6 +255,15 @@ public class OpenAPI {
 	public ParameterSet getParameterSet() {
 		return params;
 	}
+	
+	/**
+	 * Return result variables of an Open API
+	 * 
+	 * @return result variable set of Open API
+	 */
+	public ParameterSet getResultVarSet() {
+		return params;
+	}
 
 	/**
 	 * Return result variables of an Open API
@@ -256,10 +272,9 @@ public class OpenAPI {
 	 */
 	public ArrayList<String> getResultVariables() {
 		ArrayList<String> result = new ArrayList<String>();
-		Query query = QueryFactory.create(this.mappingSparql);
-		List<Var> vars = query.getProjectVars();
-		for(int i = 0; i < vars.size(); i++) {
-			result.add(vars.get(i).toString());
+		Enumeration<String> e = this.resultVars.keys();
+		while(e.hasMoreElements()) {
+			result.add(e.nextElement());
 		}
 		return result;
 	}
@@ -270,7 +285,6 @@ public class OpenAPI {
 	 * @return a string representation of this OpenAPI instance
 	 */
 	public String toString() {
-		ArrayList<String> resultVar = this.getResultVariables();
 		StringBuffer sb = new StringBuffer();
 		sb.append("Open API Name: ");
 		sb.append(this.openApiName);
@@ -284,14 +298,10 @@ public class OpenAPI {
 		sb.append("Open API Parameters: ");
 		sb.append("\n");
 		sb.append(this.params.toString());
-		if (resultVar.size() > 0) {
-			sb.append("Open API Return Values: ");
-			sb.append("\n");
-			for (int i = 0; i < resultVar.size(); i++) {
-				sb.append(resultVar.get(i));
-				sb.append("\n");
-			}
-		}
+		sb.append("\n");
+		sb.append("Open API Return Values: ");
+		sb.append("\n");
+		sb.append(this.resultVars.toString());
 		sb.append("\n");
 		return sb.toString();
 	}

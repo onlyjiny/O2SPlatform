@@ -1,4 +1,4 @@
-# Saved by TopBraid on Mon Apr 23 14:19:55 KST 2018
+# Saved by TopBraid on Thu Jul 19 21:47:18 KST 2018
 # baseURI: http://openapi.alvis.kr/ontology/
 # imports: http://purl.org/dc/elements/1.1/
 # imports: http://spinrdf.org/spin
@@ -21,6 +21,11 @@
       rdfs:label "Endpoint"@en , "엔드포인트"@ko ;
       rdfs:subClassOf owl:Thing .
 
+:OntobaseEndpoint
+      rdf:type owl:Class ;
+      rdfs:label "Ontobase endpoint"@en , "온토베이스 엔드포인트"@ko ;
+      rdfs:subClassOf :Endpoint .
+
 :OpenAPI
       rdf:type owl:Class ;
       rdfs:label "Open API"@en , "오픈 API"@ko ;
@@ -30,6 +35,10 @@
       rdf:type owl:Class ;
       rdfs:label "Parameter"@en , "매개변수"@ko ;
       rdfs:subClassOf owl:Thing .
+
+:ResultVar
+      rdf:type owl:Class ;
+      rdfs:label "Result"@en , "결과값"@ko .
 
 :VirtuosoEndpoint
       rdf:type owl:Class ;
@@ -47,10 +56,22 @@
       rdfs:label "아이디"@ko , "ID for endpoint connection"@en ;
       rdfs:range xsd:string .
 
+:endpointPort
+      rdf:type owl:DatatypeProperty ;
+      rdfs:domain :Endpoint ;
+      rdfs:label "port"@en , "포트"@ko ;
+      rdfs:range xsd:integer .
+
 :endpointPwd
       rdf:type owl:DatatypeProperty ;
       rdfs:domain :Endpoint ;
       rdfs:label "패스워드"@ko , "Password for endpoint connection"@en ;
+      rdfs:range xsd:string .
+
+:endpointServiceName
+      rdf:type owl:DatatypeProperty ;
+      rdfs:domain :OntobaseEndpoint ;
+      rdfs:label "온토베이스 서비스 이름"@ko , "ontobase service name"@en ;
       rdfs:range xsd:string .
 
 :hasEndpoint
@@ -64,6 +85,12 @@
       rdfs:domain :OpenAPI ;
       rdfs:label "매개변수"@ko , "parameter"@en ;
       rdfs:range :Parameter .
+
+:hasResultVar
+      rdf:type owl:ObjectProperty ;
+      rdfs:domain :OpenAPI ;
+      rdfs:label "결과 변수"@ko , "result var"@en ;
+      rdfs:range :ResultVar .
 
 :mappingSparql
       rdf:type owl:DatatypeProperty ;
@@ -81,6 +108,12 @@
       rdf:type owl:DatatypeProperty ;
       rdfs:domain :Parameter ;
       rdfs:label "parameter name"@en , "매개변수 이름"@ko ;
+      rdfs:range xsd:string .
+
+:resultVar
+      rdf:type owl:DatatypeProperty ;
+      rdfs:domain :ResultVar ;
+      rdfs:label "결과 변수"@ko , "result var"@en ;
       rdfs:range xsd:string .
 
 :url  rdf:type owl:DatatypeProperty ;

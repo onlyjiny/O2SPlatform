@@ -36,6 +36,7 @@ public class O2SModelTest extends TestCase {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		System.out.println(this.model.toString());
         assertNotNull(this.model);
     }
 	
@@ -53,9 +54,9 @@ public class O2SModelTest extends TestCase {
 	@Test
 	public void testExecuteVirtuoso() throws OpenAPINotExistException, MissingParameterException {
 		Hashtable<String, String> params = new Hashtable<String, String>();
-		params.put("limit", "50");
+		params.put("limit", "10");
 		params.put("offset", "0");
-		String json = this.model.execute("getTriples", params);
+		String json = this.model.execute("getLibraryTriples", params);
 		System.out.println(json);
 		assertNotNull(json);
 	}

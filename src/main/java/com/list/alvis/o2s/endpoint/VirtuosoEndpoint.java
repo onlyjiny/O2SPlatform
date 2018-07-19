@@ -92,10 +92,6 @@ public class VirtuosoEndpoint extends Endpoint {
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append(super.url);
-		sb.append(", ");
-		sb.append(super.url);
-		sb.append(", ");
-		sb.append(super.url);
 		return sb.toString();
 	}
 }

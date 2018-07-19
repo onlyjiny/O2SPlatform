@@ -15,6 +15,16 @@ import com.list.alvis.o2s.core.Vocabulary;
 import com.list.ontobase.client.query.SparqlQuery;
 import com.list.ontobase.msg.common.OntoException;
 
+/**
+ * <p>
+ * The OntobaseEndpoint class indicates the entry point to a service for SPARQL. It
+ * implements a way to connect the endpoint for Ontobase.
+ * </p>
+ * 
+ * @author Myungjin Lee
+ * @version 0.1
+ * @since 2018-04-23
+ */
 public class OntobaseEndpoint extends Endpoint {
 
 	private static final Logger logger = LoggerFactory.getLogger(OntobaseEndpoint.class);
@@ -24,6 +34,14 @@ public class OntobaseEndpoint extends Endpoint {
 	
 	private SparqlQuery sq;
 
+	/**
+	 * Constructor.
+	 * 
+	 * @param resource
+	 *            This is the resource that indicates an instance of Endpoint class.
+	 * @throws ValueNotExistException 
+	 *            If there is no value of Open API's title, name, and mapping SPARQL 
+	 */
 	public OntobaseEndpoint(Resource resource) throws ValueNotExistException {
 		super(resource);
 		if (!resource.hasProperty(Vocabulary.PORT_PROPERTY)) {
@@ -46,6 +64,13 @@ public class OntobaseEndpoint extends Endpoint {
 		this.sq = new SparqlQuery(super.url, this.port, this.service);
 	}
 
+	/**
+	 * This method is used to execute SPARQL through Ontobase SPARQL endpoint.
+	 * 
+	 * @param sparql
+	 *            This is the SPARQL to run.
+	 * @return SPARQL results as JSON
+	 */
 	@Override
 	public String execute(String sparql) {
 		SPARQLResult result = null;
@@ -60,5 +85,20 @@ public class OntobaseEndpoint extends Endpoint {
 		ResultSetFormatter.outputAsJSON(outputStream, results);
 		logger.debug(new String(outputStream.toByteArray()));
 		return new String(outputStream.toByteArray());
+	}
+	
+	/**
+	 * Returns a string representation of this OntobaseEndpoint instance
+	 * 
+	 * @return a string representation of this OntobaseEndpoint instance
+	 */
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		sb.append(super.url);
+		sb.append(":");
+		sb.append(this.port);
+		sb.append("/");
+		sb.append(this.service);
+		return sb.toString();
 	}
 }
